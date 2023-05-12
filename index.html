@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Test</title>
+    <style>
+        body{
+            background-color: gray;
+        }
+        #app{
+            text-align: center;
+            padding-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+        }
+
+        ul>li{
+            color:black;
+            text-transform:capitalize;
+            font-size: large;
+        }
+        .done {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{title}} ({{totalItem}})</h1>
+        <form @submit.prevent="addItem">
+            <input type="text" v-model="newItem" placeholder="Add Your List">
+            <button type="submit" :disabled="newItem.length === 0">Add List</button>
+        </form>
+        <ul>
+            <li v-for="(todo,index) in todos">
+                <input type="checkbox" v-model="todo.completed">
+                <span v-bind:class="{'done': todo.completed}">{{todo.text}}</span>
+                <button @click="deleteItem(index)" v-if="todo.completed"> Delete</button>
+            </li>
+        </ul>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                title: "Vue To Do List",
+                newItem: '',
+                todos: [
+
+                ],
+            },
+            methods: {
+                addItem() {
+                    let item = {
+                        text: this.newItem,
+                        completed: false
+                    }
+                    this.todos = [...this.todos, item];
+                    this.newItem = "";
+                },
+                deleteItem(index) {
+                    this.todos.splice(index, 1);
+                },
+            },
+            computed: {
+                totalItem() {
+                    let total = this.todos.filter(function (todo) {
+                        return todo.completed === false;
+                    });
+                    return total.length;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
